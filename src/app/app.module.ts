@@ -7,18 +7,22 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './home/welcome.component';
 import { ProductModule } from './products/product.module';
+import { CustomerComponent } from './customer/customer.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent, 
-    WelcomeComponent
+    WelcomeComponent, CustomerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule, 
+    FormsModule,
     RouterModule.forRoot([      
       { path: 'welcome', component: WelcomeComponent },
+      { path: 'customers', component: CustomerComponent },
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: '**', redirectTo: 'welcome', pathMatch: 'full' } 
     ]),
