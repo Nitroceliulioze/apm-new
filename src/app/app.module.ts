@@ -8,7 +8,8 @@ import { AppComponent } from './app.component';
 import { WelcomeComponent } from './home/welcome.component';
 import { ProductModule } from './products/product.module';
 import { CustomerComponent } from './customer/customer.component';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule, 
-    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([      
       { path: 'welcome', component: WelcomeComponent },
       { path: 'customers', component: CustomerComponent },
