@@ -6,7 +6,7 @@ import {
   AbstractControl,
   ValidatorFn,
 } from '@angular/forms';
-
+import { debounceTime } from 'rxjs';
 import { Customer } from './customer';
 
 function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
@@ -43,7 +43,12 @@ function ratingRange(min: number, max: number): ValidatorFn {
 export class CustomerComponent implements OnInit {
   customerForm!: FormGroup;
   customer = new Customer();
-  emailMessage = '';
+  emailMessage!: string;
+
+  private validationMessages: { [index: string]: any } = {
+    required: 'Please enter your email address.',
+    email: 'Please enter a valid email address.',
+  };
 
   constructor(private fb: FormBuilder) {}
 
@@ -63,6 +68,15 @@ export class CustomerComponent implements OnInit {
       rating: [null, ratingRange(1, 5)],
       sendCatalog: true,
     });
+
+    this.customerForm
+      .get('notification')
+      ?.valueChanges.subscribe((value) => this.setNotification(value));
+
+    const emailControl = this.customerForm.get('emailGroup.email');
+    emailControl?.valueChanges.pipe(debounceTime(1000)).subscribe((value) =>
+      this.setMessage(emailControl)
+    );
   }
 
   save(): void {
@@ -87,5 +101,14 @@ export class CustomerComponent implements OnInit {
       phoneControl?.clearValidators();
     }
     phoneControl?.updateValueAndValidity();
+  }
+
+  setMessage(c: AbstractControl): void {
+    this.emailMessage = '';
+    if ((c.touched || c.dirty) && c.errors) {
+      this.emailMessage = Object.keys(c.errors)
+        .map((key) => this.validationMessages[key])
+        .join(' ');
+    }
   }
 }

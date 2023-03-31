@@ -72,19 +72,11 @@
               placeholder="Email (required)"
               formControlName="email"
               [ngClass]="{
-                'is-invalid': customerForm.get('emailGroup')?.errors ||
-                  ((customerForm.get('emailGroup.email')?.touched ||
-                    customerForm.get('emailGroup.email')?.dirty) &&
-                  !customerForm.get('emailGroup.email')?.valid)
+                'is-invalid': emailMessage
               }"
             />
             <span class="invalid-feedback">
-              <span *ngIf="customerForm.get('emailGroup.email')?.errors?.['required']">
-                Please enter your email address.
-              </span>
-              <span *ngIf="customerForm.get('emailGroup.email')?.errors?.['email']">
-                Please enter a valid email address.
-              </span>
+              {{ emailMessage }}
             </span>
           </div>
         </div>
@@ -101,10 +93,11 @@
               placeholder="Confirm Email (required)"
               formControlName="confirmEmail"
               [ngClass]="{
-                'is-invalid': customerForm.get('emailGroup')?.errors ||
+                'is-invalid':
+                  customerForm.get('emailGroup')?.errors ||
                   ((customerForm.get('emailGroup.confirmEmail')?.touched ||
                     customerForm.get('emailGroup.confirmEmail')?.dirty) &&
-                  !customerForm.get('emailGroup.confirmEmail')?.valid)
+                    !customerForm.get('emailGroup.confirmEmail')?.valid)
               }"
             />
             <span class="invalid-feedback">
@@ -113,10 +106,8 @@
               >
                 Please confirm your email address.
               </span>
-              <span
-                *ngIf="customerForm.get('emailGroup')?.errors?.['match']"
-              >
-               The confirmation does not match the email address.
+              <span *ngIf="customerForm.get('emailGroup')?.errors?.['match']">
+                The confirmation does not match the email address.
               </span>
             </span>
           </div>
@@ -152,7 +143,6 @@
                 type="radio"
                 value="email"
                 formControlName="notification"
-                (click)="setNotification('email')"
               />Email
             </label>
           </div>
@@ -163,7 +153,6 @@
                 type="radio"
                 value="text"
                 formControlName="notification"
-                (click)="setNotification('text')"
               />Text
             </label>
           </div>
