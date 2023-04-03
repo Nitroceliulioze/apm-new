@@ -1,16 +1,21 @@
-import { RouterModule } from '@angular/router';
-import { ConvertToSpacesPipe } from './../shared/convert-to-spaces.pipe';
-import { ProductDetailComponent } from './product-detail.component';
-import { ProductListComponent } from './product-list.component';
 import { NgModule } from '@angular/core';
-import { ProductDetailGuard } from './product-detail.guard';
+import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { SharedModule } from '../shared/shared.module';
+
+import { ProductListComponent } from './product-list.component';
+import { ProductDetailComponent } from './product-detail.component';
+import { ProductDetailGuard } from './product-detail.guard';
+import { ProductEditComponent } from './product-edit.component';
+import { ConvertToSpacesPipe } from './../shared/convert-to-spaces.pipe';
 
 @NgModule({
   declarations: [
     ProductListComponent,
     ProductDetailComponent,
-    ConvertToSpacesPipe
+    ConvertToSpacesPipe,
+    ProductEditComponent
   ],
   imports: [
     RouterModule.forChild([
@@ -19,9 +24,14 @@ import { SharedModule } from '../shared/shared.module';
         path: 'products/:id', 
         canActivate: [ProductDetailGuard],
         component: ProductDetailComponent 
+      },
+      { 
+        path: 'products/:id/edit',
+        component: ProductEditComponent 
       }
     ]),
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ]
 })
 export class ProductModule { }
