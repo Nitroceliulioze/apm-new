@@ -9,6 +9,7 @@ import { ProductDetailComponent } from './product-detail.component';
 import { ProductDetailGuard } from './product-detail.guard';
 import { ProductEditComponent } from './product-edit.component';
 import { ConvertToSpacesPipe } from './../shared/convert-to-spaces.pipe';
+import { ProductEditGuard } from './product-edit.guard';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ConvertToSpacesPipe } from './../shared/convert-to-spaces.pipe';
       },
       { 
         path: 'products/:id/edit',
+        canDeactivate: [ProductEditGuard],
         component: ProductEditComponent 
       }
     ]),
