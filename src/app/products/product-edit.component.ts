@@ -116,8 +116,41 @@ export class ProductEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   
-  getProduct(id: number) {}
+  getProduct(id: number): void {
+    this.productService.getProduct(id).subscribe({
+      next: (product: IProduct) => this.displayProduct(product),
 
+    })
+    // this.productService.getProduct(productId)
+    //   .subscribe({
+    //     next: (product: IProduct) => this.displayProduct(product),
+    //     error: err => this.errorMessage = err
+    //   });
+  }
+
+  displayProduct(product: IProduct): void {
+    if (this.productForm) {
+      this.productForm.reset();
+    }
+    this.product = product;
+
+    if (this.product.productId === 0) {
+      this.pageTitle = 'Add Product';
+    } else {
+      this.pageTitle = `Edit Product: ${this.product.productName}`;
+    }
+
+    // Update the data on the form
+    this.productForm.patchValue({
+      productName: this.product.productName,
+      productCode: this.product.productCode,
+      starRating: this.product.starRating,
+      description: this.product.description
+    });
+    this.productForm.setControl('tags', this.fb.array(this.product.tags || []));
+  }
+
+  
   saveProduct() {}
 
   deleteTag(index: number): void {

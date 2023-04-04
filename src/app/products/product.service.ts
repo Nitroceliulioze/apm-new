@@ -1,7 +1,7 @@
 import { IProduct } from './product';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError, tap, throwError, map } from 'rxjs';
+import { Observable, catchError, tap, throwError, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,10 +21,16 @@ export class ProductService {
   // Get one product
   // Since we are working with a json file, we can only retrieve all products
   // So retrieve all products and then find the one we want using 'map'
-  getProduct(id: number): Observable<IProduct | undefined> {
-    return this.getProducts().pipe(
-      map((products: IProduct[]) => products.find((p) => p.productId === id))
-    );
+  getProduct(id: number): Observable<IProduct> {
+    if (id === 0) {
+      return of(this.initializeProduct());
+    }
+    const url = `${this.productUrl}/${id}`;
+    return this.http.get<IProduct>(url)
+      .pipe(
+        tap(data => console.log('getProduct: ' + JSON.stringify(data))),
+        catchError(this.handleError)
+      );
   }
 
   
@@ -42,5 +48,20 @@ export class ProductService {
     }
     console.error(errorMessage);
     return throwError(() => errorMessage);
+  };
+
+  private initializeProduct(): IProduct {
+    // Return an initialized object
+    return {
+      productId: 0,
+      productName: '',
+      productCode: '',
+      tags: [],
+      releaseDate: '',
+      price: 0,
+      description: "",
+      starRating: 0,
+      imageUrl: ""
+    };
   }
 }
